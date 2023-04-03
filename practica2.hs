@@ -94,8 +94,6 @@ esPrimo 1 = False
 esPrimo n = and [(mod n i) /= 0 | i<-[2..(n-1)]]
 
 
-
-
 iguales :: (Eq a) => [a] -> [a] -> Bool
 iguales [] [] = True
 iguales [] [x] = False
@@ -112,5 +110,6 @@ listaPrimos (n) = [n | n <- [1..n-1], esPrimo(n)]
 --Ejercicio 10
 reversa :: [a] -> [a]
 reversa [] = []
-reversa x = x
---reversa (x:xs) = (reversa xs):x
+reversa (x:xs) = reversa xs ++ [x]
+
+
