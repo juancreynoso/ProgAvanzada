@@ -93,14 +93,6 @@ esPrimo :: Int -> Bool
 esPrimo 1 = False
 esPrimo n = and [(mod n i) /= 0 | i<-[2..(n-1)]]
 
-
-iguales :: (Eq a) => [a] -> [a] -> Bool
-iguales [] [] = True
-iguales [] [x] = False
-iguales [x] [] = False
---iguales (x:xs) (y:ys) = (iguales x y) && (iguales xs ys) 
-
-
 --Ejercicio 9
 listaPrimos :: Int -> [Int]
 listaPrimos 0 = []
@@ -112,4 +104,16 @@ reversa :: [a] -> [a]
 reversa [] = []
 reversa (x:xs) = reversa xs ++ [x]
 
+--Ejercicio 11
+iguales :: (Eq a) => [a] -> [a] -> Bool
+iguales [] [] = True
+iguales [] [x] = False
+iguales [x] [] = False
+iguales (x:xs) (y:ys) = x == y && (iguales xs ys) 
+
+--Ejercicio 12
+esPalindromo :: (Eq a) => [a]  -> Bool
+esPalindromo [] = True
+esPalindromo [x] = True
+esPalindromo (x:xs) = x:xs == reversa (x:xs)
 
