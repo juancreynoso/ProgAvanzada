@@ -113,4 +113,4 @@ listaPrimos (n) = [n | n <- [1..n-1], esPrimo(n)]
 reversa :: [a] -> [a]
 reversa [] = []
 reversa x = x
-reversa (x:xs) = (reversa xs):x
+--reversa (x:xs) = (reversa xs):x
