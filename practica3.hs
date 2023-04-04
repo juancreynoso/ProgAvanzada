@@ -16,6 +16,24 @@ power2 n = 2 * power2 (n-1)
 
 --Ejercicio 4
 toBinary :: Int -> [Int]
-toBinary 0 = [0]
+toBinary 0 = []
 toBinary 1 = [1]
-toBinary n = reverse (mod n 2 : toBinary (div n 2))
+toBinary n =  toBinary(div n 2) ++ [mod n 2]
+
+--Ejercicio 5
+binarioPar :: Int -> Bool
+binarioPar 0 = True
+binarioPar 1 = False
+binarioPar n
+            | last (toBinary n) == 1 = False
+            | otherwise = True
+
+--Ejercicio 6
+
+
+--Ejercicio 7
+cuadPerf :: Int -> [Int]
+cuadPerf n = [x | x <- [0..n], x*x == n]
+
+
+
