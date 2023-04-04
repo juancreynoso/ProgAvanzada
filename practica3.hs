@@ -7,8 +7,15 @@ mergeLists (x:xs) (y:ys)
                   | otherwise = y : mergeLists ys (x:xs)
 
 --Ejercicio 2
-ordList :: Ord a => [a] ->[a]
-ordList [] = []
-ordList (x:y:ys) 
-                | x <= y = x : ordList (y:ys)
-                | otherwise = y : ordList (x:ys)
+
+--Ejercicio 3
+power2 :: Int -> Int
+power2 0 = 1
+power2 1 = 2
+power2 n = 2 * power2 (n-1)
+
+--Ejercicio 4
+toBinary :: Int -> [Int]
+toBinary 0 = [0]
+toBinary 1 = [1]
+toBinary n = reverse (mod n 2 : toBinary (div n 2))
