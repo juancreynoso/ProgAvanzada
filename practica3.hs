@@ -7,6 +7,16 @@ mergeLists (x:xs) (y:ys)
                   | otherwise = y : mergeLists ys (x:xs)
 
 --Ejercicio 2
+bubbleSort :: Int -> [Int] -> [Int]
+bubbleSort 0 xs = xs
+bubbleSort n xs = bubbleSort (n-1) (bubble xs)
+    where
+        bubble [] = []
+        bubble [x] = [x]
+        bubble (x:y:ys) = if x <= y
+            then x:bubble (y:xs)
+            else y:bubble (x:xs)            
+
 
 --Ejercicio 3
 power2 :: Int -> Int
@@ -53,6 +63,11 @@ posicionesC [] c pos = []
 posicionesC (x:xs) c pos
                         | x /= c = posicionesC xs c (pos+1)
                         | otherwise = pos : posicionesC xs c (pos+1)
-                    
 
-
+--Ejercicio 11
+compact :: Eq a => [a] -> [a]
+compact [] = []
+compact [x] = [x]
+compact (x:y:xs)
+            | x == y = compact (y:xs)
+            | otherwise = x:compact (y:xs)
