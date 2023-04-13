@@ -1,0 +1,143 @@
+1- 
+
+Pasos de reducción usando Orden Aplicativo
+
+2 ∗ cuadrado (head [2,4,5,6,7,8])
+= {Def head}
+2 ∗ cuadrado (2)
+= {Def cuad}
+2 * (2*2)
+= {Aritmetica}
+2 * 4
+= {Aritmetica}
+8
+
+Pasos de reducción usando Orden Normal
+2 ∗ cuadrado (head [2,4,5,6,7,8])
+= {Def cuad}
+2 * head [2,4,5,6,7,8] * head [2,4,5,6,7,8]
+= {Def head}
+2 * 2 * head [2,4,5,6,7,8]
+= {Aritmetica}
+4 * head [2,4,5,6,7,8]
+= {def head}
+4 * 2
+= {Aritmetica}
+8
+
+2- Dada la definici ́on: linf = 1 : linf . Resuelve los siguientes pasos para la
+expresión head. linf :
+
+Orden Normal
+head linf
+= {Def head}
+1
+
+Orden aplicativo
+head linf
+= {def linf}
+head 1:linf
+= {def linf}
+head 1:1:linf
+= {def linf}
+head 1:1:1:linf
+(Se crea un ciclo infinito)
+
+3- 
+f :: Int -> Int -> Int
+f x 0 = x
+f x n = cuad (f x (n-1))
+
+Orden Aplicativo
+f. 2 3
+= {Def f}
+cuad (f 2 2)
+= {Def f}
+cuad (cuad (f 2 1))
+= {Def f}
+cuad (cuad (cuad f 2 0))
+= {Def f}
+cuad (cuad (cuad 2))
+= {def cuad}
+cuad (cuad (2*2))
+= {Aritmetica}
+cuad (cuad 4)
+= {def cuad}
+cuad (4*4)
+= {Aritmetica}
+cuad 16
+= {def cuad}
+16*16
+= {Aritmetica}
+256
+
+Orden Normal
+f. 2 3
+= {def de f}
+cuad (f 2 (2))
+= {def cuad}
+(f 2 2) * (f 2 2)
+= {def f}
+cuad (f 2 1) * (f 2 2)
+= {def cuad}
+(f 2 1) * (f 2 0) * (f 2 2)
+= {def f}
+cuad (f 2 0) * (f 2 0) * (f 2 2)
+= {def cuad}
+(f 2 0) * (f 2 0) * (f 2 0) * (f 2 2)
+= {def f}
+2 * (f 2 0) * (f 2 0) * (f 2 2)
+= {def f}
+2 * 2 * (f 2 0) * (f 2 2)
+= {Aritmetica}
+4 * (f 2 0) * (f 2 2)
+= {def f}
+4 * 2 * cuad (f 2 2)
+= {Aritmetica}
+8 * cuad (f 2 2)
+= {def cuad}
+8 * (f 2 2) * (f 2 2)
+= {def f}
+8 * cuad (f 2 1) * (f 2 2)
+= {def cuad}
+8 * (f 2 1) * (f 2 1) * (f 2 2)
+= {def f}
+8 * cuad (f 2 0) * (f 2 1) * (f 2 2)
+= {def cuad}
+8 * (f 2 0) * (f 2 0) * (f 2 1) * (f 2 2)
+= {def f}
+8 * 2 * (f 2 0) * (f 2 1) * (f 2 2)
+= {Aritmetica}
+16 * (f 2 0) * (f 2 1) * (f 2 2)
+= {def f}
+16 * 2 * (f 2 1) * (f 2 2)
+= {Aritmetica}
+32 * (f 2 1) * (f 2 2)
+= {def f}
+32 * cuad (f 2 0) * (f 2 2)
+= {def cuad}
+32 * (f 2 0) * (f 2 0) * (f 2 2)
+= {def f}
+32 * 2 * (f 2 0) * (f 2 2)
+= {Aritmetica}
+64 * (f 2 0) * (f 2 2)
+= {def f}
+64 * 2 * (f 2 2)
+= {Aritmetica}
+128 * (f 2 2)
+= (def f)
+128 * cuad (f 2 2)
+= {def cuad}
+128 * (f 2 2) * (f 2 2)
+= {def f}
+128 * cuad (f 2 1) * (f 2 2)
+= {def cuad}
+128 * (f 2 1) * (f 2 1) * (f 2 2)
+= {def f}
+128 * cuad (f 2 0) * (f 2 1) * (f 2 2)
+= def cuad
+128 * (f 2 0) * (f 2 0) * (f 2 1) * (f 2 2)
+= {def f}
+128 * 2 * (f 2 0) * (f 2 1) * (f 2 2)
+= {Aritmetica}
+256 * (f 2 0) * (f 2 1) * (f 2 2)

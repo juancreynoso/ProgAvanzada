@@ -1,5 +1,4 @@
-.txt
-.dat
-.bin
-.exe
-.zip
+*.dat
+*.bin
+*.exe
+*.zip
