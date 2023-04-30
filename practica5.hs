@@ -1,5 +1,7 @@
 
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+import GHC.Base (VecElem(Int16ElemRep))
+import Language.Haskell.TH (PatSynArgs(InfixPatSyn))
 {-# HLINT ignore "Eta reduce" #-}
 {-# HLINT ignore "Use and" #-}
 {-# HLINT ignore "Use product" #-}
@@ -17,8 +19,8 @@ listaInfNat :: Int -> [Int]
 listaInfNat n = [n, n+1..]
 
 --Ejercicio 3 (Generar una lista con los primeros n naturales)
-priNNat :: Int -> [Int]
-priNNat n = [0..n]
+priNumNat :: Int -> [Int]
+priNumNat n = [1..n]
 
 --Ejercicio 4 (Retornar los primeros 5 elementos de una lista infinita de enteros positivos)
 pri5Elem :: [Int] 
@@ -32,6 +34,10 @@ cuadList xs = map cuad xs
 --Ejercicio 6 (Dado un entero positivo, retornar sus divisores)
 divisores :: Int -> [Int]
 divisores n = [x | x <- [1..n], mod n x == 0]
+
+divisores2 :: Int -> [Int]
+divisores2 n = filter (esDiv n) (priNumNat n)
+    where  esDiv n x = mod n x == 0
 
 --Ejercicio 7 (Dada una lista de naturales, obtener la lista que contenga solo los n ́umeros primos de la lista original.)
 soloPrimos :: [Int] -> [Int]
@@ -66,11 +72,18 @@ and' xs = foldl (&&) True xs
 
 tamr :: [a] -> Int
 tamr [] = 0
-tamr xs = foldr (\_ acc -> acc + 1) 0 xs
+tamr xs = foldr acc 0 xs
+    where 
+        acc :: a -> Int -> Int
+        acc _ n = n + 1
 
 taml :: [a] -> Int
 taml [] = 0
-taml xs = foldl (\acc _ -> acc + 1) 0 xs
+taml xs = foldl acc 0 xs
+    where
+        acc :: Int -> a -> Int
+        acc n _ = n + 1
+
 
 --Ejercicio 14 (Dada una lista de enteros, retornar sus sucesores.)
 listSucc :: [Int] -> [Int]
