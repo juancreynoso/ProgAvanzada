@@ -141,3 +141,69 @@ cuad (f 2 0) * (f 2 0) * (f 2 2)
 128 * 2 * (f 2 0) * (f 2 1) * (f 2 2)
 = {Aritmetica}
 256 * (f 2 0) * (f 2 1) * (f 2 2)
+
+
+4-
+Orden aplicativo
+square. inf
+= {def inf}
+square inf + 1
+= {def inf}
+square (inf (inf + 1))
+No termina nunca
+
+Orden normal
+square. inf
+= {def square}
+inf * inf
+= {def inf}
+(inf + 1) * inf
+= {def inf}
+(inf + 1 + 1) * inf
+No termina nunca
+
+
+5-
+f.2.3
+{def f}
+cuad (f.2.2)
+{def cuad}
+x * x
+[x = f.2.2]
+{def f}
+x * x
+[x = cuad(f.2.1)]
+{def cuad}
+x * x
+[[x = y * y]
+ [y = cuad(f.2.0)]]
+{def cuad}
+x * x
+[[x = y * y]
+ [y = z * z]
+ [z = 2]]
+{def cuad}
+x * x
+[[x = y * y]
+ [y = z * z]
+ [z = 2 * 2]]
+{Aritmetica}
+x * x
+[[x = y * y]
+ [y = z * z]
+ [z = 4]]
+{Reemplazo}
+x * x
+[[x = y * y]
+ [y = 4 * 4]]
+{Aritmetica}
+x * x
+[[x = y * y]
+ [y = 16]]
+{Reemplazo}
+x * x
+[x = 16 * 16]
+{Aritmetica}
+x * x
+[x = 256]
+{Aritmetica}
