@@ -1,5 +1,6 @@
 
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use splitAt" #-}
 import GHC.Base (VecElem(Int16ElemRep))
 import Language.Haskell.TH (PatSynArgs(InfixPatSyn))
 {-# HLINT ignore "Eta reduce" #-}

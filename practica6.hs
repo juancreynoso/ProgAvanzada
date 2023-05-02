@@ -36,11 +36,12 @@ sumaNat :: Nat -> Nat -> Nat
 sumaNat x y = intToNat (natToInt x + natToInt y)
 
 --Ejercicio 5
-data Tree a = Nil | Node (Tree a) a (Tree a) deriving Show
+data Tree a = Nil | Node (Tree a) a (Tree a) 
+    deriving Show
 
 --Ejercicio 6
 size:: Tree a -> Int
-size Nil = 0
+size Nil = 0 
 size (Node hi r hd) = 1 + size hi + size hd
 
 --Ejercicio 7
