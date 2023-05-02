@@ -1,5 +1,7 @@
 
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+import GHC.Base (VecElem(Int16ElemRep))
+import Language.Haskell.TH (PatSynArgs(InfixPatSyn))
 {-# HLINT ignore "Eta reduce" #-}
 {-# HLINT ignore "Use and" #-}
 {-# HLINT ignore "Use product" #-}
@@ -17,8 +19,8 @@ listaInfNat :: Int -> [Int]
 listaInfNat n = [n, n+1..]
 
 --Ejercicio 3 (Generar una lista con los primeros n naturales)
-priNNat :: Int -> [Int]
-priNNat n = [0..n]
+priNumNat :: Int -> [Int]
+priNumNat n = [1..n]
 
 --Ejercicio 4 (Retornar los primeros 5 elementos de una lista infinita de enteros positivos)
 pri5Elem :: [Int] 
@@ -67,11 +69,18 @@ and' xs = foldl (&&) True xs
 
 tamr :: [a] -> Int
 tamr [] = 0
-tamr xs = foldr (\_ acc -> acc + 1) 0 xs
+tamr xs = foldr acc 0 xs
+    where 
+        acc :: a -> Int -> Int
+        acc _ n = n + 1
 
 taml :: [a] -> Int
 taml [] = 0
-taml xs = foldl (\acc _ -> acc + 1) 0 xs
+taml xs = foldl acc 0 xs
+    where
+        acc :: Int -> a -> Int
+        acc n _ = n + 1
+
 
 --Ejercicio 14 (Dada una lista de enteros, retornar sus sucesores.)
 listSucc :: [Int] -> [Int]
