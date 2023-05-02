@@ -6,6 +6,8 @@ import Data.IntMap.Merge.Lazy (merge)
 import Data.Char (ord)
 import Data.List ( delete )
 import Text.XHtml (alt)
+import Language.Haskell.TH (prim)
+import Distribution.Simple.Utils (xargs)
 
 -- Practica 2
 
@@ -323,3 +325,38 @@ cantHojas (Node i r d) =
 sumNodes :: Arbol Int -> Int
 sumNodes Nil = 0
 sumNodes (Node i r d) = r + sumNodes i + sumNodes d
+
+
+-- Ejercicios de repaso
+ 
+--dado un número n y una lista xs, retorne true si y solo si hay repetidos en los primeros n 
+--elementos de la lista xs
+
+primerosNRep :: Int -> [Int] -> Bool  
+primerosNRep n [] = False
+primerosNRep 0 (x:xs) = False
+primerosNRep n (x:xs) = cantOcu2 x (take n (x:xs)) > 1 || primerosNRep (n-1) xs
+ 
+
+
+-- Matriz infinita de forma diagonal
+
+matrizInf :: [(Int, Int)]
+matrizInf = [(x, n-x) | n <- [0..], x <- [0..n]]
+
+-- Producto entre Naturales
+prodNat :: Nat -> Nat -> Nat
+prodNat Zero _ = Zero
+prodNat _ Zero = Zero
+prodNat n m = intToNat2 $ natToInt2 n * natToInt2 m
+
+prodNat2 :: Nat -> Nat -> Nat
+prodNat2 Zero _ = Zero
+prodNat2 _ Zero = Zero
+prodNat2 (Succ n) (Succ m) = sumaNat3 (Succ n) (prodNat (Succ n) m)
+
+sumaNat3 :: Nat -> Nat -> Nat
+sumaNat3 Zero x = x
+sumaNat3 x Zero = x
+sumaNat3 (Succ n) (Succ m) = Succ (Succ (sumaNat3 n m)) 
+
