@@ -36,9 +36,6 @@ cuadList xs = map cuad xs
 divisores :: Int -> [Int]
 divisores n = [x | x <- [1..n], mod n x == 0]
 
-divisores2 :: Int -> [Int]
-divisores2 n = filter (esDiv n) (priNumNat n)
-    where  esDiv n x = mod n x == 0
 
 --Ejercicio 7 (Dada una lista de naturales, obtener la lista que contenga solo los n ́umeros primos de la lista original.)
 soloPrimos :: [Int] -> [Int]
