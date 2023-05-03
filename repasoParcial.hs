@@ -8,7 +8,8 @@ import Data.List ( delete )
 import Text.XHtml (alt)
 import Language.Haskell.TH (prim)
 import Distribution.Simple.Utils (xargs)
-
+import Distribution.Simple.Command (OptDescr(BoolOpt))
+import GHC.Windows (NTSTATUS)
 -- Practica 2
 
 hd :: [a] -> a
@@ -266,15 +267,15 @@ instance Show Nat where
     show Zero = "Zero"
     show (Succ n) = "Succ " ++ show n
 
-instance Eq Nat where
-    (==) :: Nat -> Nat -> Bool
-    n == m = natToInt2 n == natToInt2 m
+-- instance Eq Nat where
+--     (==) :: Nat -> Nat -> Bool
+--     n == m = natToInt2 n == natToInt2 m
 
-instance Ord Nat where
-    (>=) :: Nat -> Nat -> Bool
-    n >= m = natToInt2 n >= natToInt2 m
-    (<=) :: Nat -> Nat -> Bool
-    n <= m = natToInt2 n <= natToInt2 m
+-- instance Ord Nat where
+--     (>=) :: Nat -> Nat -> Bool
+--     n >= m = natToInt2 n >= natToInt2 m
+--     (<=) :: Nat -> Nat -> Bool
+--     n <= m = natToInt2 n <= natToInt2 m
 
 intToNat2 :: Int -> Nat
 intToNat2 0 = Zero
@@ -326,6 +327,14 @@ sumNodes :: Arbol Int -> Int
 sumNodes Nil = 0
 sumNodes (Node i r d) = r + sumNodes i + sumNodes d
 
+espejo :: Arbol a -> Arbol a
+espejo Nil = Nil
+espejo (Node i r d) = Node (espejo d) r (espejo i)
+
+preOrden :: Arbol a -> [a]
+preOrden Nil = []
+preOrden (Node i r d) = r : (preOrden i ++ preOrden d)
+
 
 -- Ejercicios de repaso
  
@@ -337,7 +346,18 @@ primerosNRep n [] = False
 primerosNRep 0 (x:xs) = False
 primerosNRep n (x:xs) = cantOcu2 x (take n (x:xs)) > 1 || primerosNRep (n-1) xs
  
-
+-- Evaluacion aplicativa y normal son iguales
+-- f 3 [4,4,5,5,1,5,5,5]
+-- = {def f}
+-- cantOcu2 4 (take 3 [4,4,5,5,1,5,5,5]) > 1 || f 2 [4,5,5,1,5,5,5]
+-- = {def take}
+-- cantOcu2 4 [4,4,5] > 1 || f 2 [4,5,5,1,5,5,5]
+-- = {def cantOcu2}
+-- 2 > 1 || f 2 [4,5,5,1,5,5,5]
+-- = {Eval >}
+-- True || f 2 [4,5,5,1,5,5,5]
+-- = {Neutro ||}
+-- True
 
 -- Matriz infinita de forma diagonal
 
@@ -360,3 +380,137 @@ sumaNat3 Zero x = x
 sumaNat3 x Zero = x
 sumaNat3 (Succ n) (Succ m) = Succ (Succ (sumaNat3 n m)) 
 
+-- Definicion de tipo de dato nuevo para arboles binarios en donde se distinguen las hojas
+
+data BinTree a = Leaf | Nodo (BinTree a) a (BinTree a)
+    deriving Show
+
+-- funcion que calcula la cantidad de hojas de un arbol binario
+cantLeaf :: BinTree a -> Int
+cantLeaf Leaf = 0
+cantLeaf (Nodo l a r) = 
+    if isLeaf l && isLeaf r
+        then 1
+        else cantLeaf l + cantLeaf r
+        where 
+            isLeaf :: BinTree a -> Bool
+            isLeaf Leaf = True
+            isLeaf (Nodo l a r) = False
+
+
+
+-- Resolucion primer parcial 2017
+
+imp :: Bool -> Bool -> Bool
+imp _ True = True
+imp True False = False
+imp False _ = True
+
+inf = inf + 1
+
+
+-- Evaluacion de imp
+-- inf = 1 : inf
+-- imp (inf == inf) (inf == inf)
+-- Nunca termina de evaluar, ni en orden aplicativo ni normal
+
+-- imp (inf == 5) True
+-- Nunca termina de evaluar en orden aplicativo
+
+-- Orden normal
+-- {def f}
+-- True
+
+-- imp False (inf == inf)
+-- Orden aplicativo
+-- {def inf}
+-- imp False (inf + 1 == inf)
+-- No termina nunca
+
+-- Orden Normal
+-- {def imp}
+-- 
+
+
+-- definicion de tipo de dato para numero naturales
+data Nat2 = Cero | Suc Nat2 deriving Show
+
+-- Funciones para naturales
+sum' :: Nat2 -> Nat2 -> Nat2
+sum' Cero m = m
+sum' n Cero = n
+sum' (Suc n) (Suc m) = Suc (Suc (sum' n m))
+
+mult :: Nat2 -> Nat2 -> Nat2
+mult Cero m = Cero
+mult n Cero = Cero
+mult (Suc n) (Suc m) = sum' (Suc n) (mult (Suc n) m)
+
+
+esPar :: Nat -> Bool
+esPar Zero = True
+esPar n = mod (natToInt2 n) 2 == 0  
+
+flatten2 :: [[a]] -> [a]
+flatten2 (x:xs) = foldr (++) [] (x:xs)
+
+count :: [Int] -> Int -> Int
+count [] c = 0
+count xs c = length [x | x <- xs, x == c]
+
+
+naturalAInt :: Nat -> Int
+naturalAInt Zero = 0
+naturalAInt (Succ n) = 1 + naturalAInt n
+
+enteroANat :: Int -> Nat
+enteroANat 0 = Zero
+enteroANat n = Succ (enteroANat (n-1))
+
+multNat :: Nat -> Nat -> Nat
+multNat Zero y = Zero
+multNat x Zero = Zero
+multNat x y = enteroANat $ naturalAInt x * naturalAInt y
+
+
+-- Instanciar es dotar de una clase a un tipo nuevo creado
+
+instance Ord Nat where
+    (>=) :: Nat -> Nat -> Bool
+    n >= m = naturalAInt n >= naturalAInt m
+    (<=) :: Nat -> Nat -> Bool
+    n <= m = naturalAInt n <= naturalAInt m
+
+
+instance Eq Nat where
+    (==) ::Nat -> Nat -> Bool
+    n == m = naturalAInt n == naturalAInt m
+
+
+ 
+-- fact :: Int -> Int 
+-- fact 0 = 1
+-- fact n = foldl (*) 1 [1..n]
+
+-- fact :: Int -> Int 
+-- fact 0 = 1
+-- fact n = foldl (*) 1 [1..n]
+
+-- fact 3 = foldl (*) 1 [1, 2, 3]
+--        = foldl (*) (1 * 1) [2, 3]
+--        = foldl (*) ((1 * 1) * 2) [3]
+--        = foldl (*) (((1 * 1) * 2) * 3) []
+--        = foldl (*) ((((1 * 1) * 2) * 3) * 1)
+--        = (((1 * 2) * 3) * 1)
+--        = ((2 * 3) * 1)
+--        = (6 * 1)
+--        = 6
+
+-- fact 3 = foldr (*) 1 [1, 2, 3]
+--        = 1 * foldr (*) 1 [2, 3]
+--        = 1 *  (2 * foldr (*) 1 [3])
+--        = 1 *  (2 * (3 * foldr (*) 1 []))
+--        = 1 *  (2 * (3 * 1))
+--        = 1 *  (2 * 3)
+--        = 1 *  6
+--        = 6
