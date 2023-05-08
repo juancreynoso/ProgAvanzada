@@ -17,4 +17,14 @@ maj _ False False = False
 
 -- Ejercicio 3
 paraTodo :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
-paraTodo xs ys 
+paraTodo xs ys p = and [p i ys | i <- xs]
+       
+
+p :: (a -> Bool) -> Int -> [a] -> Bool
+p f i (x:xs)
+        | i == 0 = f x
+        | otherwise = p f (i-1) xs 
+
+
+existe :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
+existe xs ys p = and [p i ys | i <- xs]
