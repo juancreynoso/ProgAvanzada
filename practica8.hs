@@ -15,23 +15,26 @@ maj False False _ = False
 maj False _ False = False
 maj _ False False = False
 
--- Ejercicio 3
+-- Ejercicio 3 (Cuantificadores para todo y existe con determinadas posiciones de una lista)
 paraTodo :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
-paraTodo xs ys p = and [p i ys | i <- xs]
+paraTodo xs ys elemPosI = and [elemPosI i ys | i <- xs]
        
-
---p :: (a -> Bool) -> Int -> [a] -> Bool
---p f i (x:xs)
---        | i == 0 = f x
---        | otherwise = p f (i-1) xs 
-
+elemPosI :: Int -> [a] -> a -- Esta funcion devuelve el elemento de la posicion i de la lista
+elemPosI i xs = xs !! i
 
 existe :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
-existe xs ys p = or [p i ys | i <- xs]
+existe xs ys elemPosI = or [elemPosI i ys | i <- xs]
 
-isEven :: Int -> [Int] -> Bool
-isEven i xs = mod (xs !! i) 2 == 0
+isEven :: Int -> [Int] -> Bool -- Funcion esPar esta forma de cuantificadores
+isEven i xs = even (xs !! i)
+
+-- Ejercicio 4 (Cuantificadores de sumatoria, productoria y contatoria de determinadas posiciones de una lista)
 
 productoria :: Num a => [Int] -> [a] -> (Int -> [a] -> a)-> a
-productoria xs ys p = product [p i ys | i <- xs]
-    where p i xs = xs !! i
+productoria xs ys elemPosI = product [elemPosI i ys | i <- xs]
+
+sumatoria :: Num a => [Int] -> [a] -> (Int -> [a] -> a)-> a
+sumatoria xs ys elemPosI = sum [elemPosI i ys | i <- xs]
+
+contatoria :: Num a => [Int] -> [a] -> (Int -> [a] -> a)-> Int
+contatoria xs ys elemPosI = length [elemPosI i ys | i <- xs]
