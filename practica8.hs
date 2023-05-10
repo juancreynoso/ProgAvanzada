@@ -20,11 +20,18 @@ paraTodo :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
 paraTodo xs ys p = and [p i ys | i <- xs]
        
 
-p :: (a -> Bool) -> Int -> [a] -> Bool
-p f i (x:xs)
-        | i == 0 = f x
-        | otherwise = p f (i-1) xs 
+--p :: (a -> Bool) -> Int -> [a] -> Bool
+--p f i (x:xs)
+--        | i == 0 = f x
+--        | otherwise = p f (i-1) xs 
 
 
 existe :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
-existe xs ys p = and [p i ys | i <- xs]
+existe xs ys p = or [p i ys | i <- xs]
+
+isEven :: Int -> [Int] -> Bool
+isEven i xs = mod (xs !! i) 2 == 0
+
+productoria :: Num a => [Int] -> [a] -> (Int -> [a] -> a)-> a
+productoria xs ys p = product [p i ys | i <- xs]
+    where p i xs = xs !! i
