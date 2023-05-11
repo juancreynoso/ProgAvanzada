@@ -1,0 +1,32 @@
+
+
+Ejercicio 1
+-----------
+f es una funcion que determina si los elementos de una lista xs son iguales.
+< paraTodo i : 0 <= i < #xs : xs.0 = xs.i >
+
+f es una funcion que determina si los elementos de una lista xs son todos diferentes.
+< paraTodo i, j : 0 <= i < #xs y 0 <= j < #xs y i /= j :  xs.i /= xs.j >
+
+f es una funcion que determina si los elementos de una lista xs estan ordenados.
+< paraTodo i : 0 <= i < #xs-1 : xs.i < xs.i+1 o xs.i >= xs.i+1 >
+
+P es un predicado que es true sii cuando aparece 1 en xs entonces debe aparecer 0 en xs.
+< existe i, j : 0 <= i <= #xs y 0 <= j < #xs y i /= j : xs.i = 1 y xs.j = 0 >
+
+p es el producto de todos los elementos primos de xs.
+< productoria i: 0 <= i < #xs y esPrimo xs.i : xs.i >
+
+esPrimo :: Int -> Bool
+esPrimo n = < sumatoria i : 1 <= i < n y mod n i = 0 : i > = 2
+
+
+Ejercicio 2
+-----------
+
+n es el menor entero tal que xs.n = true.
+< existe n : 0 <= n < #xs : xs.n = True >
+
+n es el  ́ultimo elemento de la lista tal que xs.n = true.
+< existe n : 0 <= n < #xs : xs.n = True >
+
