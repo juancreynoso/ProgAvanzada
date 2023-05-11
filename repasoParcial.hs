@@ -9,7 +9,6 @@ import Text.XHtml (alt)
 import Language.Haskell.TH (prim)
 import Distribution.Simple.Utils (xargs)
 import Distribution.Simple.Command (OptDescr(BoolOpt))
-import GHC.Windows (NTSTATUS)
 -- Practica 2
 
 hd :: [a] -> a
@@ -290,7 +289,7 @@ sumaNat2 n m = intToNat2 (natToInt2 n + natToInt2 m)
 
 
 data Arbol a = Nil | Node (Arbol a) a (Arbol a)
-    deriving Show
+    deriving Show    
 
 
 esNil :: Arbol a -> Bool
@@ -472,6 +471,11 @@ multNat Zero y = Zero
 multNat x Zero = Zero
 multNat x y = enteroANat $ naturalAInt x * naturalAInt y
 
+restaNat :: Nat -> Nat -> Nat
+restaNat n m = if n > m 
+                then enteroANat $ naturalAInt n - naturalAInt m
+                else Zero
+
 
 -- Instanciar es dotar de una clase a un tipo nuevo creado
 
@@ -514,3 +518,22 @@ instance Eq Nat where
 --        = 1 *  (2 * 3)
 --        = 1 *  6
 --        = 6
+
+data SIntExp = Cte Int | Sum SIntExp SIntExp | Mul SIntExp SIntExp deriving Show
+
+cte :: SIntExp
+cte = Cte 5
+
+factorial2 :: Int -> Int
+factorial2 0 = 1
+factorial2 n = n * factorial (n - 1)
+
+
+factoriales_1 :: Int -> [Int]
+factoriales_1 n =
+        reverse (aux n)
+        where aux 0 = [1]
+              aux n = factorial n : aux (n-1)
+        
+factoriales_3 :: Int -> [Int]
+factoriales_3 n = [factorial x | x <- [0..n]]
