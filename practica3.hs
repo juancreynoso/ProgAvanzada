@@ -58,7 +58,9 @@ repetidos x 1 = [x]
 repetidos x n = x : repetidos x (n-1)
 
 --Ejercicio 10
-posicionesC :: [Char] -> Char -> Int -> [Int]
+
+-- Precondicion: pos = 0
+posicionesC :: Eq a => [a] -> a -> Int -> [Int]
 posicionesC [] c pos = []
 posicionesC (x:xs) c pos
                         | x /= c = posicionesC xs c (pos+1)
