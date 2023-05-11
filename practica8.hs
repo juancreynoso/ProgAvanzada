@@ -32,16 +32,16 @@ existe xs ys p = or [p i ys | i <- xs]
 --existe' indices xs p = foldl (||) True ys
 --    where ys = [p i indices | i <- xs]
 
-isEven :: Int -> [Int] -> Bool -- Funcion esPar esta forma de cuantificadores
+isEven :: Integral a => Int -> [a] -> Bool -- Funcion esPar esta forma de cuantificadores
 isEven i xs = even (xs !! i)
 
 -- Ejercicio 4 (Cuantificadores de sumatoria, productoria y contatoria de determinadas posiciones de una lista)
 
 productoria :: Num a => [Int] -> [a] -> (Int -> [a] -> a)-> a
-productoria xs ys p = product [p i ys | i <- xs]
+productoria indices ys p = product [p i ys | i <- indices]
 
 sumatoria :: Num a => [Int] -> [a] -> (Int -> [a] -> a)-> a
-sumatoria xs ys p = sum [p i ys | i <- xs]
+sumatoria indices ys p = sum [p i ys | i <- indices]
 
-contatoria :: Num a => [Int] -> [a] -> (Int -> [a] -> a)-> Int
-contatoria xs ys p = length [p i ys | i <- xs]
+contatoria :: Integral a => [Int] -> [a] -> (Int -> [a] -> Bool)-> Int
+contatoria indices ys p = length [i | i <- indices, p i ys]
