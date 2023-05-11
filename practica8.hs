@@ -19,11 +19,18 @@ maj _ False False = False
 paraTodo :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
 paraTodo xs ys elemPosI = and [elemPosI i ys | i <- xs]
        
-elemPosI :: Int -> [a] -> a -- Esta funcion devuelve el elemento de la posicion i de la lista
-elemPosI i xs = xs !! i
+identidad :: Int -> [a] -> a -- Esta funcion devuelve el elemento de la posicion i de la lista
+identidad i xs = xs !! i
+
+isPos :: (Num a, Ord a) => Int -> [a] -> Bool
+isPos i xs = xs !! i == 0
 
 existe :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
-existe xs ys elemPosI = or [elemPosI i ys | i <- xs]
+existe xs ys p = or [p i ys | i <- xs]
+
+--existe' :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
+--existe' indices xs p = foldl (||) True ys
+--    where ys = [p i indices | i <- xs]
 
 isEven :: Int -> [Int] -> Bool -- Funcion esPar esta forma de cuantificadores
 isEven i xs = even (xs !! i)
@@ -31,10 +38,10 @@ isEven i xs = even (xs !! i)
 -- Ejercicio 4 (Cuantificadores de sumatoria, productoria y contatoria de determinadas posiciones de una lista)
 
 productoria :: Num a => [Int] -> [a] -> (Int -> [a] -> a)-> a
-productoria xs ys elemPosI = product [elemPosI i ys | i <- xs]
+productoria xs ys p = product [p i ys | i <- xs]
 
 sumatoria :: Num a => [Int] -> [a] -> (Int -> [a] -> a)-> a
-sumatoria xs ys elemPosI = sum [elemPosI i ys | i <- xs]
+sumatoria xs ys p = sum [p i ys | i <- xs]
 
 contatoria :: Num a => [Int] -> [a] -> (Int -> [a] -> a)-> Int
-contatoria xs ys elemPosI = length [elemPosI i ys | i <- xs]
+contatoria xs ys p = length [p i ys | i <- xs]
