@@ -1,10 +1,12 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use and" #-}
+{-# HLINT ignore "Use or" #-}
 
 -- Ejercicio 1
 nand :: Bool -> Bool -> Bool
 nand True True = False
 nand True False = True
 nand False p = True
-
 
 -- Ejercicio 2
 maj :: Bool -> Bool -> Bool -> Bool
@@ -17,20 +19,26 @@ maj _ False False = False
 
 -- Ejercicio 3 (Cuantificadores para todo y existe con determinadas posiciones de una lista)
 paraTodo :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
-paraTodo xs ys elemPosI = and [elemPosI i ys | i <- xs]
-       
-identidad :: Int -> [a] -> a -- Esta funcion devuelve el elemento de la posicion i de la lista
-identidad i xs = xs !! i
+paraTodo xs ys p = and [p i ys | i <- xs]
 
-isPos :: (Num a, Ord a) => Int -> [a] -> Bool
-isPos i xs = xs !! i == 0
+paraTodo' :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
+paraTodo' indices xs p = foldl (&&) True ys
+    where ys = [p i xs | i <- indices]
 
 existe :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
 existe xs ys p = or [p i ys | i <- xs]
 
---existe' :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
---existe' indices xs p = foldl (||) True ys
---    where ys = [p i indices | i <- xs]
+existe' :: [Int] -> [a] -> (Int -> [a] -> Bool)-> Bool
+existe' indices xs p = foldl (||) False ys
+    where ys = [p i xs | i <- indices]
+
+-- My functions
+
+identidad :: Int -> [a] -> a -- Esta funcion devuelve el elemento de la posicion i de la lista
+identidad i xs = xs !! i
+
+isZero :: (Num a, Ord a) => Int -> [a] -> Bool -- Devuelve un numero sii es 0.
+isZero i xs = xs !! i == 0
 
 isEven :: Integral a => Int -> [a] -> Bool -- Funcion esPar esta forma de cuantificadores
 isEven i xs = even (xs !! i)
