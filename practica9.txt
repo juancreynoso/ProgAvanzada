@@ -94,3 +94,5 @@ por comprension:
 • La siguiente especificacion: Dada una lista de numeros, calcular el valor
 de subsegmento de suma maxima.
 
+< Max as, bs, cs : xs = as ++ bs ++ cs : sum bs >
+
