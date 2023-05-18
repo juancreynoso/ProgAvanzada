@@ -2,31 +2,95 @@
 
 Ejercicio 1
 -----------
-f es una funcion que determina si los elementos de una lista xs son iguales.
-< paraTodo i : 0 <= i < #xs : xs.0 = xs.i >
+• f es una funcion que determina si los elementos de una lista xs son iguales.
+    < paraTodo i : 0 <= i < #xs : xs.0 = xs.i >
 
-f es una funcion que determina si los elementos de una lista xs son todos diferentes.
-< paraTodo i, j : 0 <= i < #xs y 0 <= j < #xs y i /= j :  xs.i /= xs.j >
+• f es una funcion que determina si los elementos de una lista xs son todos diferentes.
+    < paraTodo i, j : 0 <= i < #xs y 0 <= j < #xs y i /= j :  xs.i /= xs.j >
 
-f es una funcion que determina si los elementos de una lista xs estan ordenados.
-< paraTodo i : 0 <= i < #xs-1 : xs.i < xs.i+1 o xs.i >= xs.i+1 >
+• f es una funcion que determina si los elementos de una lista xs estan ordenados.
+    < paraTodo i : 0 <= i < #xs-1 : xs.i < xs.i+1 o xs.i >= xs.i+1 >
 
-P es un predicado que es true sii cuando aparece 1 en xs entonces debe aparecer 0 en xs.
-< existe i, j : 0 <= i <= #xs y 0 <= j < #xs y i /= j : xs.i = 1 y xs.j = 0 >
+• P es un predicado que es true sii cuando aparece 1 en xs entonces debe aparecer 0 en xs.
+    < existe i, j : 0 <= i <= #xs y 0 <= j < #xs y i /= j : xs.i = 1 y xs.j = 0 >
 
-p es el producto de todos los elementos primos de xs.
-< productoria i: 0 <= i < #xs y esPrimo xs.i : xs.i >
+• p es el producto de todos los elementos primos de xs.
+    < productoria i: 0 <= i < #xs y esPrimo xs.i : xs.i >
 
-esPrimo :: Int -> Bool
-esPrimo n = < sumatoria i : 1 <= i < n y mod n i = 0 : i > = 2
+    esPrimo :: Int -> Bool
+    esPrimo n = < sumatoria i : 1 <= i < n y mod n i = 0 : i > = 2
 
 
 Ejercicio 2
 -----------
 
-n es el menor entero tal que xs.n = true.
-< existe n : 0 <= n < #xs : xs.n = True >
+• n es el menor entero tal que xs.n = true.
+    < min n : 0 <= n < #xs y xs.n = True : n >
 
-n es el  ́ultimo elemento de la lista tal que xs.n = true.
-< existe n : 0 <= n < #xs : xs.n = True >
+• n es el  ́ultimo elemento de la lista tal que xs.n = true.
+    < max n : 0 <= n < #xs y xs.n = True : n >
+
+• f es una funcion que devuelve true si y solo si todos los elementos de xs son equivalentes.
+    < and n : 0 <= n < #xs : xs.0 = xs.n >
+
+
+Ejercicio 3
+-----------
+
+• f.xs determina si xs tiene la misma cantidad de pares que impares.
+
+    f :: [Num] -> Bool
+    f.xs = < sumatoria i : 0 <= i < #xs y esPar.xs.i : i > == < sumatoria i : 0 <= i < #xs y ¬esPar.xs.i : i > 
+
+• f.n determina si n es primo.
+
+    f :: Num -> Bool
+    f.n = < contatoria i : 1 <= i < n : n mod i == 0 > == 2
+
+• f.xs.ys determina si ys es una subsecuencia de xs.
+
+    f :: [a] -> [a] -> Bool
+    f. xs.ys = < Existe as, bs :: as ++ ys ++ bs = xs >
+
+
+• f.xs.ys determina si ys es una subsecuencia final de xs.
+
+    f :: [a] -> [a] -> Bool
+    f. xs.ys = < Existe zs :: zs ++ ys = xs > 
+
+
+Ejercicio 4
+-----------
+• Dada una lista de enteros, especifique la suma del subsegmento de suma
+  minima de la lista. Por ejemplo, si la lista es xs = [1, −4, −2, 1, −5, 8, −7]
+  el subsegmento que da la suma minima es [−4, −2, 1, −5], cuya suma es
+  -10. Si xs = [1, 3, 5] , el subsegmento que da la suma minima es [] , pues
+  la suma de la lista vacia es cero.
+
+    < Min as, bs, cs : x = as ++ bs ++ cs : sum.bs > 
+
+• Especifique la funcin maxigual que determina la longitud del m ́aximo sub-
+  segmento en donde todos sus elementos son iguales: maxigual : [A]− > Num.
+
+    maxigual :: [a] -> Num
+    maxigual.xs = < Max as, bs, cs : xs = as ++ bs ++ cs : (paraTodo i : 0 <= i < #bs : bs.0 = bs.1) >
+
+• Especifique la funci ́on maxdistinto : [Int]− > Int que determina la longi-
+  tud del subsegmento m ́as largo en donde todos los elementos son distintos.
+
+    maxdistinto :: [Num] -> Num
+    maxdistinto.xs = < Max as, bs, cs : xs = as ++ bs ++ cs : (paraTodo i : 0 <= i < #bs : bs.0 /= bs.1) >
+
+
+
+Ejercicio 5 
+-----------
+Dadas las funciones split3 : [a]− > [([a], [a], [a])] y split2 : [a]− >
+[([a], [a])] dadas en clases. Escribir las siguientes especificaciones usando listas
+por comprension:
+• La especificacion del ejercicio 1(e).
+• La especificacion del ejercicio 3(c).
+• La especificacion del ejercicio 3(d).
+• La siguiente especificacion: Dada una lista de numeros, calcular el valor
+de subsegmento de suma maxima.
 
