@@ -26,5 +26,12 @@ allPares = concat [diag n | n <- [0..]]
         concat (x:xs) = x ++ concat xs
 
 
+map' :: Foldable t1 => (t2 -> a) -> t1 t2 -> [a]
+map' f xs = foldl (\acc -> \x -> acc ++ [f x]) [] xs
+
+
+filter' f xs = foldl (\acc x -> acc ++ [f x]) [] xs
+
+
 
 
