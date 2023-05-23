@@ -1,0 +1,168 @@
+Ejercicio 1
+Demostrar que la concatenacion de listas es asociativa:
+• (xs ++ ys) ++ zs = xs ++ (ys ++ zs)
+
+
+
+-----------
+Ejercicio 3
+-----------
+
+Especificar y derivar la siguiente función:
+f xs dice si todos los elementos son iguales.
+
+f :: [a] -> Bool 
+f.xs = <paraTodo i : 0 <= i < #xs : xs.0 = xs.i>
+
+Caso base:
+= {Esp}
+<paraTodo i : 0 <= i < #[] : [].0 = [].i>
+= {Def #}
+<paraTodo i : 0 <= i < 0 : [].0 = [].i>
+=
+<paraTodo i : False: [].0 = [].i>
+= {Rango vacio}
+True
+
+HI: <paraTodo i : 0 <= i < #xs : xs.0 = xs.i>
+
+Caso inductivo: 
+f.(x:xs)
+= {Especif}
+<paraTodo i : 0 <= i < #(x:xs) : (x:xs).0 = (x:xs).i>
+= {def #, def .}
+<paraTodo i : 0 <= i < 1 + #xs : x = (x:xs).i>
+= {logica}
+<paraTodo i : 0 <= i < 1 ó 1 <= i < 1 + #xs : x = (x:xs).i>
+= {Particion de rango}
+<paraTodo i : 0 <= i < 1 : x = (x:xs).i> y <paraTodo i : 1 <= i < 1 + #xs : x = (x:xs).i>
+= {Rango unitario, i <- i+1}
+<x = (x:xs).0> y <paraTodo i : 1 <= i+1 < 1 + #xs : x = (x:xs).i+1>
+= {Aritmetica, def .}
+<x = (x:xs).0> y <paraTodo i : 0 <= i < #xs : xs.0 = x=xs.i> -- Me olvido de la x
+= {def .}
+x = x y <paraTodo i : 0 <= i < #xs : xs.0 = x=xs.i>
+= {logica}
+<paraTodo i : 0 <= i < #xs : xs.0 = x=xs.i>
+
+Como no se puede aplicar la hipotesis inductiva utilizo otra tecnica: Modularizacion
+
+HI: g.xs.z = <paraTodo i : 0 <= i < #xs : xs.0 = z=xs.i>
+
+Caso base: x = [] (z = xs.0)
+= {Esp g}
+<paraTodo i : 0 <= i < #[]: [].0>
+= {Def #, rango vacio}
+True
+
+Caso inductivo: x:xs
+= {Esp g}
+<paraTodo i: 0 <= i < #x:xs : x = (x:xs).i>
+= {Particion de rango}
+<paraTodo i: 0 <= i < 1: z = (x:xs).i> y <paraTodo i: 1 <= i < 1 + #xs : x = (x:xs).i>
+= {Rango vacio}
+z = x y <paraTodo i: 1 <= i < 1 + #xs : z = (x:xs).i>
+{Aritmetica, i <- i+1}
+z = x y <paraTodo i: 0 <= i < #xs : z = xs.i
+= {HI}
+z = x y g.xs.z
+
+Definicion de g
+g.[].z = True
+g.(x:xs).z = z = x y g.xs.z
+
+Definicion de f
+f.[] = True
+f:(x:xs) = g.xs.x
+
+
+-----------
+Ejercicio 4
+-----------
+
+Especificar y derivar una funcion que dada una lista de numeros devuelva su producto.
+
+f :: [Num] -> Num
+f.xs = <Productoria i : 0 <= i < #xs : xs.i>
+
+Derivacion por induccion
+HI: <Productoria i : 0 <= i < #xs : xs.i>
+
+Caso base: xs = []
+
+= {def esp f}
+<Productoria i : 0 <= i < #[] : [].i>
+= {def #}
+<Productoria i : 0 <= i < 0 : [].i>
+= {Rango vacio, neutro productoria}
+1
+
+Caso inductivo: (x:xs)
+= {def esp f}
+<Productoria i : 0 <= i < #(x:xs) : (x:xs).i>
+= {def #, def .}
+<Productoria i : 0 <= i < 1 + #xs : (x:xs).i>
+= {logica}
+<Productoria i : 0 <= i < 1 ó 1 <= i < 1 + #xs : (x:xs).i>
+= {Particion de rango}
+<Productoria i : 0 <= i < 1 : x = (x:xs).i> * <Productoria i : 0 <= i < 1 + #xs : (x:xs).i>
+= {Rango unitario, i <- i+1}
+(x:xs).0 * <Productoria i : 0 <= i+1 < 1 + #xs : (x:xs).i+1>
+= {Aritmetica, def .}
+x * <Productoria i : 0 <= i < #xs : xs.i>
+= {HI}
+x * f.xs
+
+Definicion:
+f :: [Num] -> Num
+f.xs = 1
+f.(x:xs) = x * f.xs
+
+
+-----------
+Ejercicio 5
+-----------
+
+Derivar una funcion que dada una lista determina si los elementos est ́an ordenados de forma creciente.
+
+f.xs = <paraTodo i : 0 <= i < #xs-1 : xs.i <= xs.i+1>
+
+Caso base: 
+= {esp f}
+<paraTodo i : 0 <= i < #[]-1 : [].i <= [].i+1>
+= {Rango vacio}
+True
+
+Caso inductivo: 
+
+
+-----------
+Ejercicio 7
+-----------
+
+Especificar y derivar una funcion que dada una lista determine si
+existe un elemento en ella que sea igual a la suma del resto de los elementos de
+la lista.
+
+f.xs = <existe i : 0 <= i < #xs : xs.i = sum.xs - xs.i>
+
+caso base:
+= {esp f}
+<existe i : 0 <= i < #[] : [].i = sum.[] - [].i>
+= {def #, Rango vacio}
+False
+
+caso inductivo:
+= {esp f}
+<existe i : 0 <= i < #(x:xs) : (x:xs).i = sum.(x:xs) - (x:xs).i>
+
+
+
+
+
+
+
+
+
+
+
