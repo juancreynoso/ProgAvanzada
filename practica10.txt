@@ -123,17 +123,47 @@ f.(x:xs) = x * f.xs
 Ejercicio 5
 -----------
 
-Derivar una funcion que dada una lista determina si los elementos est ́an ordenados de forma creciente.
+Derivar una funcion que dada una lista determina si los elementos estan ordenados de forma creciente.
 
-f.xs = <paraTodo i : 0 <= i < #xs-1 : xs.i <= xs.i+1>
+f.xs = <V i : 0 <= i < #xs-1 : xs.i <= xs.i+1>
 
 Caso base: 
 = {esp f}
-<paraTodo i : 0 <= i < #[]-1 : [].i <= [].i+1>
+<V i : 0 <= i < #[]-1 : [].i <= [].i+1>
+= {Rango vacio}
+True
+
+= {esp f}
+<V i : 0 <= i < #[x]-1 : [x].i <= [x].i+1>
+= {def #} {aritmetica}
+<V i : 0 <= i < 0 : [x].i <= [x].i+1>
 = {Rango vacio}
 True
 
 Caso inductivo: 
+= {esp f}
+<V i : 0 <= i < #(x:y:ys)-1 : (x:y:ys).i <= (x:y:ys).i+1>
+= {def de #}
+<V i : 0 <= i < 2 + #(xs)-1 : (x:y:ys).i <= (x:y:ys).i+1>
+= {Aritmetica}
+<V i : 0 <= i < 1 + #(xs) : (x:y:ys).i <= (x:y:ys).i+1>
+= {part de rango}
+<V i : 0 <= i < 1 : (x:y:ys).i <= (x:y:ys).i+1> && <V i : 0 <= i < #(xs) : (x:y:ys).i <= (x:y:ys).i+1>
+= {rango unitario}
+<V i : i = 0 : (x:y:ys).0 <= (x:y:ys).0+1> && <V i : 0 <= i < #(xs) : (x:y:ys).i <= (x:y:ys).i+1>
+= {def i}
+(x <= y ) && <V i : 0 <= i < #(xs) : (x:y:ys).i <= (x:y:ys).i+1>
+= {reemplazo i = i+1}
+(x <= y ) && <V i : 0 <= i+1 < #(xs) : (x:y:ys).i+1 <= (x:y:ys).i+1+1>
+= {aritmetica en rango, def .}
+(x <= y ) && <V i : 0 <= i < #(xs)-1 : (y:ys).i <= (y:ys).i+1>
+= {Hip inductiva}
+(x <= y ) && f.xs
+
+Entonces, derivando:
+f.[] = True
+f.[x] = True
+f.(x:y:ys) = x <= y && f.xs
 
 
 -----------
@@ -144,25 +174,94 @@ Especificar y derivar una funcion que dada una lista determine si
 existe un elemento en ella que sea igual a la suma del resto de los elementos de
 la lista.
 
+f :: [Num] -> Bool
 f.xs = <existe i : 0 <= i < #xs : xs.i = sum.xs - xs.i>
 
 caso base:
 = {esp f}
 <existe i : 0 <= i < #[] : [].i = sum.[] - [].i>
-= {def #, Rango vacio}
-False
+= {def #, Rango vacio} (#[] = 0)
+False (Neutro del existe)
+
+Entonces: f.[] = False
 
 caso inductivo:
 = {esp f}
 <existe i : 0 <= i < #(x:xs) : (x:xs).i = sum.(x:xs) - (x:xs).i>
+= {def #, sum, particion de rango}
+<existe i : 0 <= i < 1 : (x:xs).i = x + sum.xs - (x:xs).i> ó <existe i : 1 <= i < 1 + #xs : (x:xs).i = x + sum.xs - (x:xs).i>
+= {rango unitario, aritmetica, i <- i+1}
+x = x + sum.xs - x ó <existe i :  1 <= i+1 < 1 + #xs : (x:xs).i+1 = x+sum.xs - (x:xs).i+1
+= {resto 1 en rango, def index ((x:xs).i+1 = xs.i)}
+x = sum.xs ó <existe i :  0 <= i < #xs : xs.i = x+sum.xs - xs.i 
+
+Observacion : (veo que tengo que usar generalizacion porque tengo un x +sum.xs) 
+Si utilizo el neutro de la op y me queda la especificacion orginal debo usar generalizacion.
+
+Utilizo generalizacion
+g.xs.n = <existe i :  0 <= i < #xs : xs.i = x+sum.xs - xs.i 
+
+caso base:
+= {esp f}
+<existe i : 0 <= i < #[] : [].i = x sum.[] - [].i>
+= {def #, Rango vacio} (#[] = 0)
+False (Neutro del existe)
+
+caso inductivo: x:xs
+= {esp}
+<existe i : 0 <= i < #(x:xs) : (x:xs).i = n + sum.(x:xs) - (x:xs).i>
+= {Separacion de termino} 
+(x = n + sum.(x:xs) - x) ó <existe i : 0 <= i< #xs : (x:xs).i+1 = n + x + sum.xs - (x:xs).i+1
+= {def sum}
+(x = n + x + sum.xs - x) ó <existe i : 0 <= i< #xs : (x:xs).i+1 = n + x + sum.xs - (x:xs).i+1
+= {arit, index}
+x = n + sum.xs ó <existe i : 0 <= i< #xs : (xs).i = n + x + sum.xs - (xs).i
+= {Hipotesis inductiva}
+x = n + sum.xs ó  g.xs.(n+x)
 
 
+Entonces derivando con la tecnica de generalizacion obtenemos la siguiente definicion de g: 
 
+g :: [Num] -> Num -> Bool
+g.[].n = False
+g.(x:xs).n = x = n + sum.xs ó  g.xs.(n+x)
 
+------------
+Ejercicio 10
+------------
 
+sum.xs = <sumatoria i : 0 < i <= #xs : xs.i>
+sum [] = 0
+sum (x:xs) = x + sum.xs
 
+cant.xs = <contatoria i : 0 < i <= #xs : i>
+cant [] = 0
+cant xs = 1 + cant.xs
 
+prom.xs = <sumatoria i : 0 <= i < #xs> / <contatoria i : 0 < i <= #xs : i>
+prom.xs = sum.xs / cant.xs
+prom.xs = (sum.xs, cant.xs)
 
+Caso base: xs.[]
+= {def sum, def cant}
+(0,0)
 
+Caso inductivo: x:xs
+(sum.(x:xs), cant.(x:xs))
+= {def sum, def cant}
+(x + sum.xs, 1 + cant.xs)
+= {introducimos a y b}
+(x + a, 1 + b)
+[a = sum.xs
+ b = cant.xs]
+= {Igualdad de pares}
+(x+a, 1+b)
+[(a,b)= (sum.xs, cont.xs)]
+{hip inductiva}
+(x + a, 1 + b)
+[(a,b) = prom.xs]
 
+prom [] = (0,0)
+prom (x:xs) = (x + a, 1 + b)
+    where (a,b) = prom xs
 
