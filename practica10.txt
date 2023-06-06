@@ -1,7 +1,84 @@
+
+-----------
 Ejercicio 1
+-----------
+
 Demostrar que la concatenacion de listas es asociativa:
 • (xs ++ ys) ++ zs = xs ++ (ys ++ zs)
 
+[] ++ ys = ys
+(x:xs) ++ ys = x : (xs ++ ys)
+
+Caso base: xs = []
+([] ++ ys) ++ zs
+{def ++}
+ys ++ zs
+{def ys}
+[] ++ (ys ++ zs)
+
+Caso inductivo:
+(x:xs ++ ys) ++ zs
+{def ++}
+x : (xs ++ ys) ++ zs
+{HI}
+x : xs ++ (ys ++ zs)
+{def ++}
+(x:xs) ++ (ys ++ zs)
+
+-----------
+Ejercicio 2
+-----------
+
+reversa :: [a] -> [a]
+reversa [] = []
+reversa (x:xs) = reversa xs ++ [x]
+
+• reversa (xs ++ ys) = reversa ys ++ reversa xs (HI)
+
+Caso base: xs = []
+reversa ([] ++ ys) = reversa ys ++ reversa []
+{def reversa}
+reversa ([] ++ ys) = reversa ys ++ []
+{def ++}
+reversa ys = reversa ys
+{logica}
+True
+
+Caso inductivo: 
+reversa (x:xs ++ ys) = reversa ys ++ reversa (x:xs)
+{def ++}
+reversa (x:(xs ++ ys)) = reversa ys ++ reversa (x:xs)
+{def reversa}
+reversa (xs ++ ys) ++ [x] = reversa ys ++ reversa xs ++ [x]
+{Hipotesis inductiva}
+reversa (xs ++ ys) ++ [x] = reversa (xs ++ ys) ++ [x]
+{Logica}
+True
+
+• reversa (reversa xs) = xs (HI)
+caso base: xs = []
+reversa (reversa []) = []
+{def reversa}
+reversa [] = []
+{def reversa}
+[] = []
+{Logica}
+True
+
+caso inductivo:
+reversa (reversa (x:xs)) = (x:xs)
+{def reversa}
+reversa (reversa xs ++ [x]) = (x:xs)
+{reversa de ++}
+reversa [x] ++ reversa (reversa xs) = (x:xs)
+{Hipotesis inductiva}
+(reversa [x]) ++ xs = (x:xs)
+{def reversa}
+[x] ++ [xs] = (x:xs)
+{def ++}
+(x:xs) = (x:xs)
+{Logica}
+True
 
 
 -----------
@@ -39,17 +116,17 @@ f.(x:xs)
 = {Rango unitario, i <- i+1}
 <x = (x:xs).0> y <paraTodo i : 1 <= i+1 < 1 + #xs : x = (x:xs).i+1>
 = {Aritmetica, def .}
-<x = (x:xs).0> y <paraTodo i : 0 <= i < #xs : xs.0 = x=xs.i> -- Me olvido de la x
+<x = (x:xs).0> y <paraTodo i : 0 <= i < #xs : x=xs.i> -- Me olvido de la x
 = {def .}
-x = x y <paraTodo i : 0 <= i < #xs : xs.0 = x=xs.i>
+x = x y <paraTodo i : 0 <= i < #xs : x=xs.i>
 = {logica}
-<paraTodo i : 0 <= i < #xs : xs.0 = x=xs.i>
+<paraTodo i : 0 <= i < #xs : x=xs.i>
 
 Como no se puede aplicar la hipotesis inductiva utilizo otra tecnica: Modularizacion
 
-HI: g.xs.z = <paraTodo i : 0 <= i < #xs : xs.0 = z=xs.i>
+HI: g.xs.z = <paraTodo i : 0 <= i < #xs : x = z=xs.i>
 
-Caso base: x = [] (z = xs.0)
+Caso base: xs = [] (z = xs.0)
 = {Esp g}
 <paraTodo i : 0 <= i < #[]: [].0>
 = {Def #, rango vacio}
@@ -73,7 +150,7 @@ g.(x:xs).z = z = x y g.xs.z
 
 Definicion de f
 f.[] = True
-f:(x:xs) = g.xs.x
+f:(x:xs) = g.xs.z
 
 
 -----------
@@ -160,11 +237,48 @@ Caso inductivo:
 = {Hip inductiva}
 (x <= y ) && f.xs
 
-Entonces, derivando:
+Entonces, derivando obtengo:
+f :: [a] -> Bool
 f.[] = True
 f.[x] = True
 f.(x:y:ys) = x <= y && f.xs
 
+-----------
+Ejercicio 6
+-----------
+
+m :: [Num] -> Num
+
+m.xs = <Min i : 0 <= i < #xs : xs.i>
+
+caso base: m.[]
+{especificacion m}
+<Min i : 0 <= i < #[] : [].i>
+{def #, rango vacio}
++infinito
+
+caso inductivo: m.(x:xs)
+{especificacion m}
+<Min i : 0 <= i < #(x:xs) : (x:xs).i>
+{def #}
+<Min i : 0 <= i < 1 + #(xs) : (x:xs).i>
+{part de rango}
+<Min i : 0 <= i < 1 : (x:xs).i> Min <Min i : 1 <= i < 1 + #(xs) : (x:xs).i>
+{rango unitario}
+<Min i : i = 0 : (x:xs).0> Min <Min i : 0 <= i < 1 + #(xs) : (x:xs).i>
+{def .}
+x Min <Min i : 1 <= i < 1 + #xs : (x:xs).i>
+{reemplazo i = i+1}
+x Min <Min i : 1 <= i+1 < 1 + #xs : (x:xs).i+1>
+{aritmetica} {def .} (resto 1)
+x Min <Min i : 0 <= i < #xs : xs.i>
+{Hip inductiva}
+x Min m.xs
+
+Entonces, derivando obtengo: 
+m :: [Num] -> Num
+m [] = +infinito
+m (x:xs) = x Min m.xs
 
 -----------
 Ejercicio 7
@@ -203,7 +317,7 @@ g.xs.n = <existe i :  0 <= i < #xs : xs.i = x+sum.xs - xs.i
 
 caso base:
 = {esp f}
-<existe i : 0 <= i < #[] : [].i = x sum.[] - [].i>
+<existe i : 0 <= i < #[] : [].i = x + sum.[] - [].i>
 = {def #, Rango vacio} (#[] = 0)
 False (Neutro del existe)
 
@@ -225,6 +339,14 @@ Entonces derivando con la tecnica de generalizacion obtenemos la siguiente defin
 g :: [Num] -> Num -> Bool
 g.[].n = False
 g.(x:xs).n = x = n + sum.xs ó  g.xs.(n+x)
+
+
+-----------
+Ejercicio 8
+-----------
+
+f : Nat → Bool
+
 
 ------------
 Ejercicio 10
